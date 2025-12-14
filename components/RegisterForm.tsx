@@ -75,7 +75,9 @@ export function RegisterForm() {
       newErrors.address = 'Address is required'
     }
 
-    if (formData.email && !isValidEmail(formData.email)) {
+    if (!formData.email || !formData.email.trim()) {
+      newErrors.email = 'Email is required'
+    } else if (!isValidEmail(formData.email)) {
       newErrors.email = 'Invalid email format'
     }
 
@@ -107,7 +109,7 @@ export function RegisterForm() {
         body: JSON.stringify({
           ...formData,
           phoneNumbers: cleanedPhoneNumbers,
-          email: formData.email || undefined,
+          email: formData.email.trim(),
         }),
       })
 
@@ -333,7 +335,7 @@ export function RegisterForm() {
 
       <div>
         <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Email (Optional)
+          Email <span className="text-red-500">*</span>
         </label>
         <input
           type="email"
@@ -343,6 +345,7 @@ export function RegisterForm() {
           className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-white ${
             errors.email ? 'border-red-500' : 'border-gray-300'
           }`}
+          required
         />
         {errors.email && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.email}</p>}
       </div>

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { generateUniqueCode } from '@/lib/utils'
+import { sendRegistrationEmail } from '@/lib/email'
 import type { RegisterFormData } from '@/types'
 
 export async function POST(request: NextRequest) {
@@ -22,7 +23,7 @@ export async function POST(request: NextRequest) {
     const body: RegisterFormData = await request.json()
 
     // Validate required fields
-    if (!body.name || !body.city || !body.state || !body.pinCode || !body.address) {
+    if (!body.name || !body.city || !body.state || !body.pinCode || !body.address || !body.email) {
       return NextResponse.json(
         { success: false, error: 'Missing required fields' },
         { status: 400 }
@@ -32,6 +33,15 @@ export async function POST(request: NextRequest) {
     if (!body.phoneNumbers || body.phoneNumbers.length === 0) {
       return NextResponse.json(
         { success: false, error: 'At least one phone number is required' },
+        { status: 400 }
+      )
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(body.email.trim())) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid email format' },
         { status: 400 }
       )
     }
@@ -72,10 +82,29 @@ export async function POST(request: NextRequest) {
         state: body.state.trim(),
         pinCode: body.pinCode.trim(),
         address: body.address.trim(),
-        email: body.email?.trim() || null,
+        email: body.email.trim(),
         uniqueCode,
       },
     })
+
+    // Send registration emails (don't fail registration if email fails)
+    try {
+      await sendRegistrationEmail({
+        name: partner.name,
+        email: partner.email,
+        uniqueCode: partner.uniqueCode,
+        phoneNumbers: Array.isArray(partner.phoneNumbers)
+          ? partner.phoneNumbers
+          : JSON.parse(partner.phoneNumbers as unknown as string),
+        city: partner.city,
+        state: partner.state,
+        pinCode: partner.pinCode,
+        address: partner.address,
+      })
+    } catch (emailError) {
+      console.error('Failed to send registration email:', emailError)
+      // Continue even if email fails
+    }
 
     return NextResponse.json({
       success: true,

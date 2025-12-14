@@ -6,7 +6,7 @@ export interface Partner {
   state: string
   pinCode: string
   address: string
-  email: string | null
+  email: string
   uniqueCode: string
   adminNotes: string | null
   createdAt: Date
@@ -19,7 +19,14 @@ export interface RegisterFormData {
   state: string
   pinCode: string
   address: string
-  email?: string
+  email: string
+}
+
+export interface ContactFormData {
+  name: string
+  email: string
+  subject: string
+  message: string
 }
 
 export interface RegisterResponse {

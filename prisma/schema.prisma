@@ -20,7 +20,7 @@ model Partner {
   state       String
   pinCode     String   @map("pin_code")
   address     String
-  email       String?
+  email       String
   uniqueCode  String   @unique @map("unique_code")
   adminNotes  String?  @map("admin_notes") @db.Text
   createdAt   DateTime @default(now()) @map("created_at")

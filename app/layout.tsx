@@ -7,7 +7,7 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Partner Registration - Grow With Us',
+  title: 'Infibizz - Partner Registration',
   description: 'Join us as a trusted partner and be part of a fast-growing financial marketplace',
 }
 
@@ -25,7 +25,7 @@ export default function RootLayout({
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
                   <a href="/" className="text-xl font-bold text-gray-900 dark:text-white">
-                    Partner Portal
+                    Infibizz
                   </a>
                   <div className="flex items-center gap-4">
                     <a
@@ -33,6 +33,12 @@ export default function RootLayout({
                       className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
                     >
                       Register
+                    </a>
+                    <a
+                      href="/contact"
+                      className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                    >
+                      Contact Us
                     </a>
                     <a
                       href="/admin"
