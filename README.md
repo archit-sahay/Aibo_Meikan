@@ -7,6 +7,8 @@ A Next.js application for partner registration and management with admin dashboa
 - **Partner Registration**: Guests can register with their details and receive a unique partner code
 - **Admin Dashboard**: Password-protected admin panel to view and manage all registered partners
 - **Admin Notes**: Store private notes against each partner (not visible to partners)
+- **Contact Us**: Contact form with email notifications
+- **Email Notifications**: Automatic emails on registration and contact form submissions
 - **Dark Mode**: Full light/dark mode support with theme toggle
 - **Responsive Design**: Mobile-friendly interface
 
@@ -38,12 +40,19 @@ Create a `.env.local` file in the root directory:
 ```env
 ADMIN_PASSWORD=your-secure-password-here
 DATABASE_URL=mysql://root:password@localhost:3306/chachu_partners
+
+# Email Configuration (Gmail)
+# Note: You need to use a Gmail App Password, not your regular password
+# See instructions below for creating an App Password
+SMTP_USER=contact.infibiz@gmail.com
+SMTP_PASSWORD=your_gmail_app_password_here
 ```
 
 Replace:
 - `your-secure-password-here` with your desired admin password
 - `root:password` with your MySQL username and password
 - `chachu_partners` with your database name (or create a new database)
+- `your_gmail_app_password_here` with your Gmail App Password (see Email Setup below)
 
 ### 3. Create MySQL Database
 
@@ -64,7 +73,21 @@ This will:
 - Create the `partners` table in your MySQL database
 - Generate the Prisma client for TypeScript
 
-### 5. Start Development Server
+### 5. Set Up Gmail App Password (for Email Functionality)
+
+Gmail requires an App Password for third-party applications. To create one:
+
+1. Go to your Google Account: https://myaccount.google.com/
+2. Navigate to **Security** → **2-Step Verification** (enable it if not already enabled)
+3. Scroll down to **App passwords**
+4. Select **Mail** and **Other (Custom name)** → enter "Infibizz"
+5. Click **Generate**
+6. Copy the 16-character password (no spaces)
+7. Add it to your `.env.local` as `SMTP_PASSWORD`
+
+**Important**: Use the App Password, NOT your regular Gmail password.
+
+### 6. Start Development Server
 
 ```bash
 npm run dev
@@ -127,7 +150,9 @@ git push -u origin main
 3. Import your GitHub repository
 4. Add environment variables in Vercel dashboard:
    - `ADMIN_PASSWORD`: Your admin password
-   - `DATABASE_URL`: Your Postgres connection string (from Vercel Postgres or Supabase)
+   - `DATABASE_URL` or `AIBO_DB_PRISMA_DATABASE_URL`: Your Postgres connection string (from Vercel Postgres or Supabase)
+   - `SMTP_USER`: `contact.infibiz@gmail.com` (or your Gmail address)
+   - `SMTP_PASSWORD`: Your Gmail App Password (see Email Setup section below)
 
 ### 4. Set Up Production Database
 
@@ -209,13 +234,23 @@ DATABASE_URL=mysql://user:password@localhost:3306/database_name
 ```env
 ADMIN_PASSWORD=your-secure-production-password
 DATABASE_URL=postgresql://user:password@host:5432/database
+# OR use Prisma Postgres format:
+AIBO_DB_PRISMA_DATABASE_URL=postgresql://user:password@host:5432/database?pgbouncer=true&connect_timeout=15
+
+# Email Configuration
+SMTP_USER=contact.infibiz@gmail.com
+SMTP_PASSWORD=your_gmail_app_password_here
 ```
+
+**Important**: For Gmail, you MUST use an App Password (not your regular password). See Email Setup instructions above.
 
 ## Features in Detail
 
 ### Partner Registration
 
-- Collects: Name, Phone Number(s), City, State, Pin Code, Address, Email (optional)
+- Collects: Name, Phone Number(s), City, State, Pin Code, Address, Email (required)
+- Sends welcome email to partner with their unique code
+- Sends notification email to admin
 - Validates all required fields
 - Generates unique partner code (format: `PART-XXXXXXXX`)
 - Displays success message with unique code

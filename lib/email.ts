@@ -5,9 +5,14 @@ const SMTP_CONFIG = {
   port: 587,
   secure: false, // true for 465, false for other ports
   auth: {
-    user: 'contact.infibiz@gmail.com',
-    pass: 'Archit$Kabir5151',
+    user: process.env.SMTP_USER || 'contact.infibiz@gmail.com',
+    pass: process.env.SMTP_PASSWORD || '',
   },
+}
+
+// Validate SMTP configuration
+if (!SMTP_CONFIG.auth.pass) {
+  console.warn('SMTP_PASSWORD environment variable is not set. Email functionality will not work.')
 }
 
 // Create reusable transporter object
