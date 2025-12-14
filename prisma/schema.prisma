@@ -7,8 +7,9 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  // Prisma Postgres uses AIBO_DB_PRISMA_DATABASE_URL, fallback to DATABASE_URL
-  url      = env("AIBO_DB_PRISMA_DATABASE_URL") ?? env("DATABASE_URL")
+  // Prisma Postgres creates AIBO_DB_PRISMA_DATABASE_URL
+  // If using standard Postgres, set DATABASE_URL instead
+  url      = env("AIBO_DB_PRISMA_DATABASE_URL")
 }
 
 model Partner {
