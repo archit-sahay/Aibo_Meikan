@@ -13,8 +13,8 @@ async function verifyAdmin(request: NextRequest): Promise<boolean> {
     return false
   }
 
-  const providedPassword = authHeader.replace('Bearer ', '')
-  return providedPassword === adminPassword
+  const providedPassword = authHeader.replace('Bearer ', '').trim()
+  return providedPassword === adminPassword.trim()
 }
 
 export async function GET(request: NextRequest) {
