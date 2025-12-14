@@ -5,8 +5,13 @@ import type { RegisterFormData } from '@/types'
 
 export async function POST(request: NextRequest) {
   try {
-    // Check if DATABASE_URL is configured
-    if (!process.env.DATABASE_URL) {
+    // Check if DATABASE_URL is configured (support Prisma Postgres format too)
+    const databaseUrl = process.env.DATABASE_URL || 
+      process.env.AIBO_DB_PRISMA_DATABASE_URL ||
+      process.env.POSTGRES_PRISMA_URL ||
+      Object.entries(process.env).find(([key]) => key.includes('PRISMA_DATABASE_URL'))?.[1]
+    
+    if (!databaseUrl) {
       console.error('DATABASE_URL is not configured')
       return NextResponse.json(
         { success: false, error: 'Database not configured. Please contact administrator.' },
