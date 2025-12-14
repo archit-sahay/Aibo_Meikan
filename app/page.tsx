@@ -13,11 +13,11 @@ export default function Home() {
         <div className="prose prose-lg dark:prose-invert max-w-none mb-12">
           <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
             We are creating a powerful platform where you can sell financial instruments effortlessly and earn consistent income.
-            Whether you're an experienced professional or just stepping into the world of finance, our ecosystem is built to unlock your potential and expand your opportunities.
+            Whether you&apos;re an experienced professional or just stepping into the world of finance, our ecosystem is built to unlock your potential and expand your opportunities.
           </p>
 
           <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-            Join us as a trusted partner and be part of a fast-growing financial marketplace. Together, we'll build new possibilities, open revenue streams, and achieve success as one team.
+            Join us as a trusted partner and be part of a fast-growing financial marketplace. Together, we&apos;ll build new possibilities, open revenue streams, and achieve success as one team.
           </p>
 
           <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
