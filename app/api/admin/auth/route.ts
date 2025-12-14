@@ -13,7 +13,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    if (password === adminPassword) {
+    // Trim whitespace from both password and stored value for comparison
+    const trimmedPassword = password.trim()
+    const trimmedAdminPassword = adminPassword.trim()
+    
+    if (trimmedPassword === trimmedAdminPassword) {
       return NextResponse.json({ success: true })
     } else {
       return NextResponse.json(
