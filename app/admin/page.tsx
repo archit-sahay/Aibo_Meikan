@@ -113,6 +113,34 @@ export default function AdminPage() {
     }
   }
 
+  const handleDeletePartner = async (partnerId: string) => {
+    try {
+      const adminPassword = localStorage.getItem('admin_password')
+      if (!adminPassword) {
+        setIsAuthenticated(false)
+        localStorage.removeItem('admin_authenticated')
+        return
+      }
+
+      const response = await fetch(`/api/partners/${partnerId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${adminPassword}`,
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to delete partner')
+      }
+
+      // Refresh partners list
+      fetchPartners()
+    } catch (err) {
+      console.error('Delete partner error:', err)
+      throw err
+    }
+  }
+
   const handleLogout = () => {
     setIsAuthenticated(false)
     localStorage.removeItem('admin_authenticated')
@@ -158,7 +186,11 @@ export default function AdminPage() {
           <p className="text-gray-600 dark:text-gray-400">Loading partners...</p>
         </div>
       ) : (
-        <PartnerList partners={partners} onUpdateNotes={handleUpdateNotes} />
+        <PartnerList 
+          partners={partners} 
+          onUpdateNotes={handleUpdateNotes}
+          onDeletePartner={handleDeletePartner}
+        />
       )}
     </div>
   )

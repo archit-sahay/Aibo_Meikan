@@ -59,3 +59,41 @@ export async function POST(
   }
 }
 
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const isAuthenticated = await verifyAdmin(request)
+    if (!isAuthenticated) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+
+    const partnerId = params.id
+
+    // Delete the partner
+    await prisma.partner.delete({
+      where: { id: partnerId },
+    })
+
+    return NextResponse.json({
+      success: true,
+      message: 'Partner deleted successfully',
+    })
+  } catch (error) {
+    console.error('Delete partner error:', error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: process.env.NODE_ENV === 'development' 
+          ? `Failed to delete partner: ${errorMessage}` 
+          : 'Failed to delete partner' 
+      },
+      { status: 500 }
+    )
+  }
+}
