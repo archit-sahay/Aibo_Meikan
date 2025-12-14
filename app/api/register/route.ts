@@ -5,6 +5,15 @@ import type { RegisterFormData } from '@/types'
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if DATABASE_URL is configured
+    if (!process.env.DATABASE_URL) {
+      console.error('DATABASE_URL is not configured')
+      return NextResponse.json(
+        { success: false, error: 'Database not configured. Please contact administrator.' },
+        { status: 503 }
+      )
+    }
+
     const body: RegisterFormData = await request.json()
 
     // Validate required fields
